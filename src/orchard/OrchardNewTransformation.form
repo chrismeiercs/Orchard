@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.3" maxVersion="1.8" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="tfnMethodButtonGroup">
+    </Component>
+    <Component class="javax.swing.ButtonGroup" name="cellTypeButtonGroup">
+    </Component>
+  </NonVisualComponents>
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="tfnEffLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="controlPlasmidLabel" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="tfnField" max="32767" attributes="0"/>
+                                  <Component id="controlPlasmidField" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cuvetteButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tfnMethodLabel" min="-2" max="-2" attributes="0"/>
+                                  <Component id="nineSixPlateButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="twoFiveWellPlateButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="createNewTfnButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                              <Component id="cellTypeLabel" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="wtButton" min="-2" max="-2" attributes="0"/>
+                                  <Component id="pJV53Button" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="batchNameLabel" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Component id="batchInputField" min="-2" pref="89" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="notebookLocationLabel" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="startPageLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="notebookNumLabel" min="-2" max="-2" attributes="0"/>
+                                          <Component id="endPageLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Component id="notebookInputField" min="-2" max="-2" attributes="0"/>
+                                          <Component id="startPageInputField" min="-2" max="-2" attributes="0"/>
+                                          <Component id="endPageInputField" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                          </Group>
+                      </Group>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="newTfnBanner" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace pref="33" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPane1" min="-2" pref="160" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="importTfnButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="1" attributes="0">
+                      <Component id="showGeneStatsButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="newTfnBanner" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="importTfnButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cellTypeLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="createNewTfnButton" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="pJV53Button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="wtButton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="controlPlasmidLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="controlPlasmidField" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="batchNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="batchInputField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="tfnEffLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tfnField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="15" pref="15" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="notebookLocationLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="notebookNumLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="notebookInputField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="startPageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="startPageInputField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="endPageLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="endPageInputField" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="tfnMethodLabel" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="cuvetteButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="twoFiveWellPlateButton" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="nineSixPlateButton" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace pref="24" max="32767" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Component id="jScrollPane1" min="-2" pref="210" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="showGeneStatsButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="11" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Component class="javax.swing.JLabel" name="cellTypeLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Electrocomptent Cell Type"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="pJV53Button">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="M. smegmatis mc2155:pJV53"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="wtButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="M. smegmatis mc2155 WT"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="batchNameLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Batch Name:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="batchInputField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Batch"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="tfnEffLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Tfn Efficiency:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="tfnField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Efficiency"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="notebookLocationLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Notebook Location"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="notebookNumLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Notebook #:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="startPageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Start Page:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="endPageLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="End Page:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="notebookInputField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Notebook #"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="startPageInputField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Start Page"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="endPageInputField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="End Page"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="importTfnButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Import Gene Data CSV"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="controlPlasmidLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Control Plasmid:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="controlPlasmidField">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Plasmid"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="tfnMethodLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Transformation Method"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="cuvetteButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Single Cuvette"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="nineSixPlateButton">
+      <Properties>
+        <Property name="selected" type="boolean" value="true"/>
+        <Property name="text" type="java.lang.String" value="96 Well Plate"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JRadioButton" name="twoFiveWellPlateButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="25 Well Plate"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="newTfnBanner">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="24" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="New Transformation"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="createNewTfnButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Create New Transformation"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JList" name="tfnGeneList">
+          <Properties>
+            <Property name="model" type="javax.swing.ListModel" editor="org.netbeans.modules.form.editors2.ListModelEditor">
+              <StringArray count="5">
+                <StringItem index="0" value="Item 1"/>
+                <StringItem index="1" value="Item 2"/>
+                <StringItem index="2" value="Item 3"/>
+                <StringItem index="3" value="Item 4"/>
+                <StringItem index="4" value="Item 5"/>
+              </StringArray>
+            </Property>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
+    <Component class="javax.swing.JButton" name="showGeneStatsButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Show Gene Stats"/>
+      </Properties>
+    </Component>
+  </SubComponents>
+</Form>
