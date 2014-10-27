@@ -7,6 +7,9 @@ package orchard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -242,7 +245,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
     private DatabaseConnector connection = null;
     private Connection dbConnection = null;
 
-    private void connectToDatabase() {
+    /*private void connectToDatabase() {
 
         try {
             connection = new DatabaseConnector();
@@ -254,7 +257,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
 
     private void disconnectFromDatabase() {
         connection.closeDBConnection(dbConnection);
-    }
+    }*/
 
     private void addListeners() {
         geneStatsButton.addActionListener(new TransformationInfoActionListener());
@@ -306,7 +309,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
         private DatabaseConnector connection = null;
         private Connection dbConnection = null;
 
-        private void connectToDatabase() {
+        /*private void connectToDatabase() {
 
             try {
                 connection = new DatabaseConnector();
@@ -318,16 +321,29 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
 
         private void disconnectFromDatabase() {
             connection.closeDBConnection(dbConnection);
-        }
+        }*/
 
         @Override
         public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
             if (source == geneStatsButton) {
                 OrchardGeneStats geneStats = new OrchardGeneStats();
-                connectToDatabase();
-                //Query
-                disconnectFromDatabase();
+                DatabaseConnector dbConnector = new DatabaseConnector();
+                Connection dbConnection = null;
+                
+                try {
+                    dbConnection = dbConnector.connectDB();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardTransformationInfo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(OrchardTransformationInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    //query
+                    dbConnector.closeDBConnection(dbConnection);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 
                 geneStats.setColonyCount(null);
                 geneStats.setKOProduced(null);

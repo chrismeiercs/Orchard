@@ -6,8 +6,10 @@ package orchard;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
@@ -401,7 +403,7 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
     class NewTransformationActionListener implements ActionListener {
 
-        private DatabaseConnector connection = null;
+        /*private DatabaseConnector connection = null;
         private Connection dbConnection = null;
 
         private void connectToDatabase() {
@@ -416,16 +418,28 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
         private void disconnectFromDatabase() {
             connection.closeDBConnection(dbConnection);
-        }
+        }*/
 
         @Override
         public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
             if (source == showGeneStatsButton) {
                 OrchardGeneStats geneStats = new OrchardGeneStats();
-                connectToDatabase();
-                //Query
-                disconnectFromDatabase();
+                DatabaseConnector dbConnector = new DatabaseConnector();
+                Connection dbConnection = null;
+                try {
+                    dbConnection = dbConnector.connectDB();
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                try {
+                    //query
+                    dbConnector.closeDBConnection(dbConnection);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                 geneStats.setColonyCount(null);
                 geneStats.setKOProduced(null);
@@ -444,6 +458,8 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
                 } catch (IOException ex) {
                     Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 DefaultListModel geneListModel = new DefaultListModel();
 
@@ -456,10 +472,10 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
             }
 
             if (source == createNewTfnButton) {
-                connectToDatabase();
+                /*connectToDatabase();
 
                 new DatabaseConnector().deposit();
-                disconnectFromDatabase();
+                disconnectFromDatabase();*/
 
             } else {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.

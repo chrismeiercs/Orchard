@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.SQLException;
 
 /**
  *
@@ -19,14 +20,14 @@ import java.sql.Connection;
 public class OrchardImportCSV {
 
     private Connection dbConnection = null;
-    private DatabaseConnector connection = null;
+    private DatabaseConnector dbConnector = null;
 
-    public OrchardImportCSV(File csvFile) throws FileNotFoundException, IOException {
+    public OrchardImportCSV(File csvFile) throws FileNotFoundException, IOException, SQLException {
 
         try {
-            DatabaseConnector connection = new DatabaseConnector();
-            dbConnection = connection.connectDB();
-            connection.closeDBConnection(dbConnection);
+            dbConnector = new DatabaseConnector();
+            dbConnection = dbConnector.connectDB();
+            dbConnector.closeDBConnection(dbConnection);
         } catch (Exception e) {
             System.out.println("Unable to connect to database");
         }
@@ -36,7 +37,7 @@ public class OrchardImportCSV {
         } catch (Exception e) {
             System.out.println("Unable to read CSV: " + e);
         } finally {
-            connection.closeDBConnection(dbConnection);
+            dbConnector.closeDBConnection(dbConnection);
         }
 
     }

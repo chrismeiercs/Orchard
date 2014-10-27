@@ -7,6 +7,10 @@ package orchard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -285,7 +289,7 @@ public class OrchardGeneInfo extends javax.swing.JFrame {
             }
         }
 
-        private void disconnectFromDatabase() {
+        private void disconnectFromDatabase() throws SQLException {
             connection.closeDBConnection(dbConnection);
         }
 
@@ -295,11 +299,41 @@ public class OrchardGeneInfo extends javax.swing.JFrame {
             Object source = e.getSource();
 
             if (source == viewTfnButton) {
+                //get selected from list
                 OrchardTransformationInfo tfnInfo = new OrchardTransformationInfo();
-
-                connectToDatabase();
-                //query
-                disconnectFromDatabase();
+                DatabaseConnector dbConnector = new DatabaseConnector();
+                ResultSet rs = null;
+                Connection dbConnection = null;
+                try {
+                    dbConnection = dbConnector.connectDB();
+                    
+                    
+                    //statement
+                    //execute statement
+                    //get results set
+                    
+                    
+                    
+                    
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                finally{
+                    try {
+                        dbConnector.closeDBConnection(dbConnection);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+                /*try {
+                    //query
+                    dbConnector.closeDBConnection(dbConnection);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
                 String value = "";
                 tfnInfo.setBatchField(value);
                 tfnInfo.setCompCellTypeField(value);

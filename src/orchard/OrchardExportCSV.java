@@ -27,12 +27,12 @@ public class OrchardExportCSV {
     //private String queryIDs;
     private Connection dbConnection;
 
-    public OrchardExportCSV(String fileName, JList IDs) throws IOException {
-        DatabaseConnector connection = null;
-        dbConnection = null;
+    public OrchardExportCSV(String fileName, JList IDs) throws IOException, SQLException {
+        DatabaseConnector dbConnector = new DatabaseConnector() ;
+        Connection dbConnection = null;
         try {
-            connection = new DatabaseConnector();
-            dbConnection = connection.connectDB();
+           
+            dbConnection = dbConnector.connectDB();
         } catch (Exception e) {
             System.out.println("Unable to connect to database: " + e);
         }
@@ -45,7 +45,7 @@ public class OrchardExportCSV {
         } catch (Exception e) {
             System.out.println("Exception: " + e);
         } finally {
-            connection.closeDBConnection(dbConnection);
+            dbConnector.closeDBConnection(dbConnection);
         }
     }
 

@@ -273,6 +273,7 @@ public class OrchardGeneStats extends javax.swing.JFrame {
                 geneInfo.setStartLocationField(null);
                 geneInfo.setStopLocationField(null);
                 geneInfo.setVisible(true);*/
+                geneInfo.setVisible(true);
             }
             
             

@@ -7,7 +7,9 @@
 package orchard;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -22,7 +24,7 @@ public class OrchardCSVFileOpener extends javax.swing.JFrame {
     /**
      * Creates new form ImportCSV
      */
-    public OrchardCSVFileOpener() throws IOException {
+    public OrchardCSVFileOpener() throws IOException, FileNotFoundException, SQLException {
         initComponents();
         makeFileChooser();
     }
@@ -98,6 +100,8 @@ public class OrchardCSVFileOpener extends javax.swing.JFrame {
                     new OrchardCSVFileOpener().setVisible(true);
                 } catch (IOException ex) {
                     Logger.getLogger(OrchardCSVFileOpener.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardCSVFileOpener.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
             }
@@ -108,7 +112,7 @@ public class OrchardCSVFileOpener extends javax.swing.JFrame {
     private javax.swing.JFileChooser importCSVBox;
     // End of variables declaration//GEN-END:variables
 
-    private void makeFileChooser() throws IOException{
+    private void makeFileChooser() throws IOException, FileNotFoundException, SQLException{
         //importCSVBox = new JFileChooser();
         int result = importCSVBox.showOpenDialog(this);
         
