@@ -7,9 +7,12 @@ package orchard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultListModel;
 
 /**
  *
@@ -23,7 +26,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
     public OrchardTransformationInfo() {
         initComponents();
         addListeners();
-        setGeneList();
+        clearGeneList();
     }
 
     /**
@@ -133,12 +136,14 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
                             .addComponent(notebookNumberField))
                         .addGap(79, 79, 79)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(geneStatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(geneListPane, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(geneListPane, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(geneStatsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(25, 25, 25))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(80, 80, 80)
                         .addComponent(tfnInfoBanner)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(68, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -180,7 +185,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
                             .addComponent(efficiencyLabel)
                             .addComponent(efficiencyField)))
                     .addComponent(geneListPane, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(49, Short.MAX_VALUE))
         );
 
         pack();
@@ -244,31 +249,32 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private DatabaseConnector connection = null;
     private Connection dbConnection = null;
-
+    private String tfnDate = null;
     /*private void connectToDatabase() {
 
-        try {
-            connection = new DatabaseConnector();
-            dbConnection = connection.connectDB();
-        } catch (Exception e) {
-            System.out.println("Unable to connect to database");
-        }
-    }
+     try {
+     connection = new DatabaseConnector();
+     dbConnection = connection.connectDB();
+     } catch (Exception e) {
+     System.out.println("Unable to connect to database");
+     }
+     }
 
-    private void disconnectFromDatabase() {
-        connection.closeDBConnection(dbConnection);
-    }*/
+     private void disconnectFromDatabase() {
+     connection.closeDBConnection(dbConnection);
+     }*/
 
     private void addListeners() {
         geneStatsButton.addActionListener(new TransformationInfoActionListener());
     }
 
-    private void setGeneList() {
-        geneList = null;
-        /*Opendb connection
-         query for genes from that transformation date
-         set geneList equal to results
-         */
+    private void clearGeneList() {
+        geneList.setModel(new DefaultListModel());
+    }
+
+    public void appendGeneList(String value) {
+        DefaultListModel geneListModel = (DefaultListModel) geneList.getModel();
+        geneListModel.addElement(value);
 
     }
 
@@ -304,6 +310,10 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
         startPgField.setText(value);
     }
 
+    public void setTfnDate(String date) {
+        tfnDate = date;
+    }
+
     class TransformationInfoActionListener implements ActionListener {
 
         private DatabaseConnector connection = null;
@@ -311,18 +321,17 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
 
         /*private void connectToDatabase() {
 
-            try {
-                connection = new DatabaseConnector();
-                dbConnection = connection.connectDB();
-            } catch (Exception e) {
-                System.out.println("Unable to connect to database");
-            }
-        }
+         try {
+         connection = new DatabaseConnector();
+         dbConnection = connection.connectDB();
+         } catch (Exception e) {
+         System.out.println("Unable to connect to database");
+         }
+         }
 
-        private void disconnectFromDatabase() {
-            connection.closeDBConnection(dbConnection);
-        }*/
-
+         private void disconnectFromDatabase() {
+         connection.closeDBConnection(dbConnection);
+         }*/
         @Override
         public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
@@ -330,9 +339,29 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
                 OrchardGeneStats geneStats = new OrchardGeneStats();
                 DatabaseConnector dbConnector = new DatabaseConnector();
                 Connection dbConnection = null;
-                
+
+                ResultSet rs = null;
+
+                PreparedStatement stmt = null;
+                String geneLocus = geneList.getSelectedValue().toString();
                 try {
                     dbConnection = dbConnector.connectDB();
+                    //have date field in tfnInfo
+                    //set from GeneInfo
+                    //String tfnDate = tfnSelectionList.getSelectedValue().toString();
+                    stmt = dbConnection.prepareStatement("Select * from Transformation_has_Gene Where Transformation_Date = '" + tfnDate + "' AND Gene_Locus = '" + geneLocus + "'");
+
+                    rs = stmt.executeQuery();
+                    geneStats.setLocusTag(geneLocus);
+                    while (rs.next()) {
+                        geneStats.setColonyCount(rs.getString("Colonies"));
+                        geneStats.setKOProduced(rs.getString("KOProduced"));
+                        geneStats.setShared(rs.getString("Shared"));
+                        geneStats.setSharedWith(rs.getString("SharedWith"));
+                        geneStats.setTfnNum(rs.getString("TfnNumber"));
+                        geneStats.setTimeConstant(rs.getString("TimeConstant"));
+                    }
+
                 } catch (SQLException ex) {
                     Logger.getLogger(OrchardTransformationInfo.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (ClassNotFoundException ex) {
@@ -344,16 +373,9 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
                 } catch (SQLException ex) {
                     Logger.getLogger(OrchardGeneInfo.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
-                geneStats.setColonyCount(null);
-                geneStats.setKOProduced(null);
-                geneStats.setShared(null);
-                geneStats.setSharedWith(null);
-                geneStats.setTfnNum(null);
-                
 
                 geneStats.setVisible(true);
-                
+
             } else {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }

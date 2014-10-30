@@ -315,6 +315,7 @@ public class OrchardGeneInfo extends javax.swing.JFrame {
                 try {
                     dbConnection = dbConnector.connectDB();
                     String tfnDate = tfnSelectionList.getSelectedValue().toString();
+                    tfnInfo.setTfnDate(tfnDate);
                     stmt = dbConnection.prepareStatement("Select * from Transformation Where Date = '" + tfnDate + "'");
 
                     rs = stmt.executeQuery();
@@ -327,7 +328,14 @@ public class OrchardGeneInfo extends javax.swing.JFrame {
                         compCellBatch = rs.getString("Comp_Cells_Batch");
                         tfnInfo.setBatchField(compCellBatch);
                         
-                        tfnInfo.setEfficiencyField(rs.getString("Efficiency"));
+                        String efficiency = rs.getString("Efficiency");
+                        
+                        if(Integer.parseInt(efficiency) == -1){
+                            tfnInfo.setEfficiencyField("Unable to Calculate");
+                        }
+                        else{
+                            tfnInfo.setEfficiencyField(efficiency);
+                        }
                         tfnInfo.setEndPgField(rs.getString("Stop_Page"));
                         tfnInfo.setMethodField(rs.getString("Method"));
                         tfnInfo.setNotebookNumberField(rs.getString("Notebook"));
@@ -346,7 +354,8 @@ public class OrchardGeneInfo extends javax.swing.JFrame {
                     rs = stmt.executeQuery();
                     
                     while(rs.next()){
-                        //geneList.addItem();
+                        tfnInfo.appendGeneList(rs.getString("Gene_Locus"));
+                       
                     }
                     
                     

@@ -231,24 +231,32 @@ public class OrchardGeneStats extends javax.swing.JFrame {
     tfnNumField
     */
     
+    public void setLocusTag(String value){
+        locusTagLabel.setText(value);
+    }
+    
+    public void setTimeConstant(String value){
+        timeConstantField.setText(value);
+    }
+    
     public void setKOProduced(String value){
-        
+        koProducedField.setText(value);
     }
     
     public void setColonyCount(String value){
-        
+        numOfColoniesField.setText(value);
     }
     
     public void setShared(String value){
-        
+        sharedField.setText(value);
     }
     
     public void setSharedWith(String value){
-        
+        sharedWithField.setText(value);
     }
     
     public void setTfnNum(String value){
-        
+        tfnNumField.setText(value);
     }
     
     private void addListeners(){
