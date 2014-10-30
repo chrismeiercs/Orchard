@@ -65,6 +65,7 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         viewGeneInfoButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Orchard");
 
         plateSelection.setPreferredSize(new java.awt.Dimension(116, 27));
 
@@ -101,6 +102,7 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         cilantroLabel.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         cilantroLabel.setText(" Orchard");
 
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/orchard/Peach_orchard-2.jpg"))); // NOI18N
         jLabel1.setText("jLabel1");
 
         deselectButton.setText("Deselect");
@@ -113,7 +115,6 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,6 +158,10 @@ public class OrchardMainFrame extends javax.swing.JFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(deselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(83, 83, 83))))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 526, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(47, 47, 47))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
