@@ -11,10 +11,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JList;
+import javax.swing.event.ListDataListener;
 
 /**
  *
@@ -30,6 +34,8 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         addActionListeners();
         setPlateSelection();
         setGeneList();
+        //plateSelection.removeAllItems();
+        clearSelectedGeneList();
     }
 
     /**
@@ -60,7 +66,6 @@ public class OrchardMainFrame extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        plateSelection.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         plateSelection.setPreferredSize(new java.awt.Dimension(116, 27));
 
         geneSelectionList.setModel(new javax.swing.AbstractListModel() {
@@ -184,7 +189,7 @@ public class OrchardMainFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(selectedGenePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(selectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(deselectButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(41, Short.MAX_VALUE))
@@ -265,6 +270,14 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         selectButton.addActionListener(listener);
         viewGeneInfoButton.addActionListener(listener);
         plateSelection.addActionListener(listener);
+        selectButton.addActionListener(listener);
+        deselectButton.addActionListener(listener);
+    }
+
+    private void clearSelectedGeneList() {
+
+        selectedGeneList.setModel(new DefaultListModel());
+
     }
 
     private void setGeneList() {
@@ -304,15 +317,32 @@ public class OrchardMainFrame extends javax.swing.JFrame {
         Connection dbConnection = null;
         try {
             dbConnection = dbConnector.connectDB();
+
             PreparedStatement stmt = dbConnection.prepareStatement("Select idPlate from Plate");
+
             rs = stmt.executeQuery();
-            plateSelection.removeAllItems();
-            plateSelection.addItem("All");
+
+            //plateSelection.removeAll();
+            //plateSelection.setModel(new )
+            //plateSelection.removeAllItems();
+            
+            //plateSelection.removeItem("Item 1");
+
+            DefaultComboBoxModel plateSelectionModel = new DefaultComboBoxModel();
+            //plateSelection.addItem("All");
+            plateSelectionModel.addElement("All");
+
+            
             while (rs.next()) {
                 //System.out.println(rs.getString("idPlate"));
 
-                plateSelection.addItem(rs.getString("idPlate"));
+                plateSelectionModel.addElement(rs.getString("idPlate"));
+                //plateSelection.addItem(rs.getString("idPlate"));
             }
+
+            plateSelection.setModel(plateSelectionModel);
+
+            //plateSelection.rem
         } catch (Exception e) {
             //System.out.println("Unable to connect 1");
             System.out.println(e);
@@ -322,6 +352,23 @@ public class OrchardMainFrame extends javax.swing.JFrame {
     }
 
     public class MainFrameActionListener implements ActionListener {
+
+        private void sortList(DefaultListModel model) {
+            String[] elements = new String[model.getSize()];
+
+            for (int i = 0; i < elements.length; i++) {
+                elements[i] = model.getElementAt(i).toString();
+            }
+
+            Arrays.sort(elements);
+            //return elements;
+            model.removeAllElements();
+
+            for (String element : elements) {
+                model.addElement(element);
+            }
+
+        }
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -347,42 +394,72 @@ public class OrchardMainFrame extends javax.swing.JFrame {
             }
 
             if (source == viewGeneInfoButton) {
-                new OrchardGeneInfo().setVisible(true);
-            }
+                OrchardGeneInfo geneInfo = new OrchardGeneInfo();
 
-            if (source == plateSelection) {
-                //System.out.println("yes");
-                String id = (String) plateSelection.getSelectedItem();
-                //System.out.println(id);
-                //case for "All"
+                String gene = selectedGeneList.getSelectedValue().toString();
                 DatabaseConnector dbConnector = new DatabaseConnector();
                 ResultSet rs = null;
                 Connection dbConnection = null;
                 PreparedStatement stmt = null;
-                if (id != null){
-                    try {
+                try {
                     dbConnection = dbConnector.connectDB();
                     
-                    if (id.equals("All")) {
-                        stmt = dbConnection.prepareStatement("Select Locus from Gene");
-                    } else if(!id.equals(null)) {
-                        stmt = dbConnection.prepareStatement("Select Locus from Gene WHERE Plate_idPlate = '" + id + "'");
+                    stmt = dbConnection.prepareStatement("Select * from Gene Where Locus = '" + gene + "'");
+
+                    rs = stmt.executeQuery();
+                    while(rs.next()){
+                        geneInfo.setGeneField(rs.getString("Locus"));
+                    geneInfo.setFunctionField(rs.getString("Function"));
+
+                    if(rs.getString("IsKO").equals("Fal")){
+                        geneInfo.setKoStatusField("No");
                     }
                     else{
-                        id = "None";
+                        geneInfo.setKoStatusField("Yes");
                     }
+                    
+
+                    geneInfo.setPlateNameField(rs.getString("Plate_idPlate"));
+
+                    geneInfo.setStartLocationField(rs.getString("Start"));
+
+                    geneInfo.setStopLocationField(rs.getString("Stop"));
+                    
+                    
+                    
+                    /*search for tfns with selected gene in Tfn_has_Gene
+                    Add date of tfn to model
+                    case for none
+                    set model
+                    */
+                    
+                    
+                    }
+                    
+                    stmt = dbConnection.prepareStatement("Select Transformation_Date from Transformation_has_Gene Where Gene_Locus = '" + gene + "'");
+
                     rs = stmt.executeQuery();
-                    geneSelectionList.removeAll();
-                    DefaultListModel geneSelectionListModel = new DefaultListModel();
-                    while (rs.next()) {
-                        //System.out.println(rs.getString("idPlate"));
-
-                        geneSelectionListModel.addElement(rs.getString("Locus"));
-
+                    
+                    while(rs.next()){
+                        
+                        geneInfo.appendTfnElement(rs.getString("Transformation_Date"));
+                        
                     }
-                    geneSelectionList.setModel(geneSelectionListModel);
+                    
+                    
+                    
+                    
+                    
+                    
+
+                    /*while (rs.next()) {
+                        
+
+                     geneSelectionListModel.addElement(rs.getString("Locus"));
+
+                     }*/
                 } catch (SQLException | ClassNotFoundException f) {
-                    System.out.println("Unable to connect 2");
+                    System.out.println("Unable to connect 3");
                     //System.out.println(f);
                 } finally {
                     try {
@@ -391,28 +468,90 @@ public class OrchardMainFrame extends javax.swing.JFrame {
                         Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-                }
-                
-
-            } 
-            
-            if(source == selectButton){
-                //item = geneList.getSelected();
-                //gene = geneList.getContents().remove(item(=);
-                //selectedList.getContents().addElement(item);
+                geneInfo.setVisible(true);
             }
-            
-            if(source == deselectButton){
+
+            if (source == plateSelection) {
+                //System.out.println("yes");
+                //String id = (String) plateSelection.getModel().getSelectedItem();
+                String id = (String) plateSelection.getSelectedItem();
+                //plateSelection.setSelectedItem(id);
+                //System.out.println(id);
+                //case for "All"
+                DatabaseConnector dbConnector = new DatabaseConnector();
+                ResultSet rs = null;
+                Connection dbConnection = null;
+                PreparedStatement stmt = null;
+                if (id != null) {
+                    try {
+                        dbConnection = dbConnector.connectDB();
+
+                        if (id.equals("All")) {
+                            stmt = dbConnection.prepareStatement("Select Locus from Gene");
+                        } else if (!id.equals(null)) {
+                            stmt = dbConnection.prepareStatement("Select Locus from Gene WHERE Plate_idPlate = '" + id + "'");
+                        } else {
+                            id = "None";
+                        }
+                        rs = stmt.executeQuery();
+                        geneSelectionList.removeAll();
+                        DefaultListModel geneSelectionListModel = new DefaultListModel();
+                        while (rs.next()) {
+                            //System.out.println(rs.getString("idPlate"));
+
+                            geneSelectionListModel.addElement(rs.getString("Locus"));
+
+                        }
+                        geneSelectionList.setModel(geneSelectionListModel);
+                    } catch (SQLException | ClassNotFoundException f) {
+                        System.out.println("Unable to connect 2");
+                        //System.out.println(f);
+                    } finally {
+                        try {
+                            dbConnector.closeDBConnection(dbConnection);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                }
+
+            }
+
+            if (source == selectButton) {
+                try {
+                    Object item = geneSelectionList.getSelectedValue();
+                    DefaultListModel geneSelectionModel = (DefaultListModel) geneSelectionList.getModel();
+                    geneSelectionModel.remove(geneSelectionList.getSelectedIndex());
+                    DefaultListModel selectedGeneModel = (DefaultListModel) selectedGeneList.getModel();
+                    selectedGeneModel.addElement(item);
+
+                    sortList(selectedGeneModel);
+
+                    //item = geneList.getSelected();
+                    //gene = geneList.getContents().remove(item);
+                    //selectedList.getContents().addElement(item);
+                } catch (Exception g) {
+                    //System.out.println("Error");
+                }
+            }
+
+            if (source == deselectButton) {
+
+                Object item = selectedGeneList.getSelectedValue();
+                DefaultListModel selectedGeneModel = (DefaultListModel) selectedGeneList.getModel();
+                selectedGeneModel.remove(selectedGeneList.getSelectedIndex());
+                DefaultListModel geneSelectionModel = (DefaultListModel) geneSelectionList.getModel();
+                geneSelectionModel.addElement(item);
+
+                //sortList(model)
+                sortList(geneSelectionModel);
+
                 //item = selectedList.getSelected();
                 //selected = selectedList.getContents().remove(item);
                 //geneList.getContents().addElement(item);
-            }
-            
-            
-            
-            else {
+            } else {
                 //System.out.println("Button not supported");
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
             }
 

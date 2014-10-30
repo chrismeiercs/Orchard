@@ -47,7 +47,7 @@ public class OrchardGeneStats extends javax.swing.JFrame {
         sharedWithField = new javax.swing.JLabel();
         showGeneInfoButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         locusTagLabel.setFont(new java.awt.Font("Ubuntu", 1, 24)); // NOI18N
         locusTagLabel.setText("locus");

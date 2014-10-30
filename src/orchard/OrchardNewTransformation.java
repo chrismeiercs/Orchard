@@ -70,7 +70,7 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
         tfnGeneList = new javax.swing.JList();
         showGeneStatsButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         cellTypeLabel.setText("Electrocomptent Cell Type");
 

@@ -56,7 +56,7 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
         efficiencyLabel = new javax.swing.JLabel();
         efficiencyField = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         tfnInfoBanner.setFont(new java.awt.Font("Tahoma", 1, 24)); // NOI18N
         tfnInfoBanner.setText("Transformation Info");
@@ -273,35 +273,35 @@ public class OrchardTransformationInfo extends javax.swing.JFrame {
     }
 
     public void setBatchField(String value) {
-
+        batchField.setText(value);
     }
 
     public void setCompCellTypeField(String value) {
-
+        compCellTypeField.setText(value);
     }
 
     public void setEfficiencyField(String value) {
-
+        efficiencyField.setText(value);
     }
 
     public void setEndPgField(String value) {
-
+        endPgField.setText(value);
     }
 
     public void setMethodField(String value) {
-
+        methodField.setText(value);
     }
 
     public void setNotebookNumberField(String value) {
-
+        notebookNumberField.setText(value);
     }
 
     public void setPlasmidTypeField(String value) {
-
+        plasmidTypeField.setText(value);
     }
 
     public void setStartPgField(String value) {
-
+        startPgField.setText(value);
     }
 
     class TransformationInfoActionListener implements ActionListener {
