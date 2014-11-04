@@ -51,11 +51,7 @@ public class DatabaseConnector {
         System.out.println("Deposit Successful!");
     }
     
-    public ResultSet withdraw(Connection connection,String statement) throws SQLException{
-        /*Statement stmt = connection.prepareStatement(statement);
-        return stmt.executeQuery(statement);*/
-        System.out.println("Withdraw Successful!");
-        return null;
-    }
+    
+    
     
 }

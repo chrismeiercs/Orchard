@@ -9,6 +9,8 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -472,10 +474,64 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
             }
 
             if (source == createNewTfnButton) {
-                /*connectToDatabase();
-
-                new DatabaseConnector().deposit();
-                disconnectFromDatabase();*/
+                //String gene = selectedGeneList.getSelectedValue().toString();
+                DatabaseConnector dbConnector = new DatabaseConnector();
+                ResultSet rs = null;
+                Connection dbConnection = null;
+                PreparedStatement stmt = null;
+                try {
+                    dbConnection = dbConnector.connectDB();
+                    
+                    //stmt = dbConnection.prepareStatement("Select * from Gene Where Locus = '" + gene + "'");
+                    String sql = null;
+                    //Insert info into Transformation_has_Gene Table
+                    String sqlTransformationHasGene = "Insert into Transformation_has_Gene (Transformation_Date, Gene_Locus, Gene_Plate_idPlate,"
+                            + "TimeConstant, Colonies, Shared, SharedWith, TfnNumber, KOProduced, Notes, DNA_Amt) "
+                            + "values (?,?,?,?,?,?,?,?,?,?,?)";
+                    rs = stmt.executeQuery();
+                    
+                    stmt = dbConnection.prepareStatement(sql);
+                    int stmtCount = 0;
+                    for(String geneElement : getGeneListGenes())
+                    {
+                        stmt.setString(1, sql); //Tfn Date
+                        stmt.setString(2, sql); //Gene_Locus
+                        stmt.setString(3, sql); //Gene_Plate_idPlate
+                        stmt.setString(4, sql); //TimeConstant
+                        stmt.setString(5, sql); //Colonies
+                        stmt.setString(6, sql); //Shared
+                        stmt.setString(7, sql); //SharedWith
+                        stmt.setString(8, sql); //TfnNumber
+                        stmt.setString(9, sql); //KOProduced
+                        stmt.setString(10, sql); //Notes
+                        stmt.setString(11, sql); //DNA_Amt
+                        stmt.addBatch();
+                        
+                        if(++stmtCount % 1000 == 0){
+                            stmt.executeBatch();
+                        }
+                        
+                    }
+                    
+                    stmt.executeBatch();
+                    
+                    //Insert data into Transformation Table
+                    String sqlTransformation = "Insert into Transformation (column name) values(?,?,?,?)";
+                    
+                    
+                    
+                    
+                    
+                } catch (SQLException | ClassNotFoundException f) {
+                    System.out.println("Unable to connect 3");
+                    //System.out.println(f);
+                } finally {
+                    try {
+                        dbConnector.closeDBConnection(dbConnection);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
 
             } else {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
