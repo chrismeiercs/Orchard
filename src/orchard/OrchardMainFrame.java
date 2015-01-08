@@ -4,8 +4,11 @@
  */
 package orchard;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,7 +20,9 @@ import java.util.logging.Logger;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.event.ListDataListener;
 
 /**
@@ -330,14 +335,11 @@ public class OrchardMainFrame extends javax.swing.JFrame {
             //plateSelection.removeAll();
             //plateSelection.setModel(new )
             //plateSelection.removeAllItems();
-            
             //plateSelection.removeItem("Item 1");
-
             DefaultComboBoxModel plateSelectionModel = new DefaultComboBoxModel();
             //plateSelection.addItem("All");
             plateSelectionModel.addElement("All");
 
-            
             while (rs.next()) {
                 //System.out.println(rs.getString("idPlate"));
 
@@ -385,13 +387,74 @@ public class OrchardMainFrame extends javax.swing.JFrame {
             }
 
             if (source == importButton) {
-                try {
-                    new OrchardCSVFileOpener().setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+
+                JFileChooser importCSVBox = new JFileChooser();
+                int result = importCSVBox.showOpenDialog(OrchardMainFrame.this);
+                if (result == importCSVBox.APPROVE_OPTION) {
+                    //file is selected
+
+                    //All database stuff must be done here
+                    DatabaseConnector dbConnector = new DatabaseConnector();
+                    ResultSet rs = null;
+                    Connection dbConnection = null;
+                    PreparedStatement stmt = null;
+                    PreparedStatement tfnStmt = null;
+                    CSVReader reader = null;
+                    try {
+                        reader = new CSVReader(new FileReader(importCSVBox.getSelectedFile()));
+                    } catch (FileNotFoundException ex) {
+                        Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    try {
+
+                        dbConnection = dbConnector.connectDB();
+
+                        //stmt = dbConnection.prepareStatement("Select * from Gene Where Locus = '" + gene + "'");
+                        String sql = null;
+
+                        
+                        String sqlTransformationHasGene = "Insert into Plate ("
+                                + "idPlate, Method) values (?,?)";
+
+                        stmt = dbConnection.prepareStatement(sqlTransformationHasGene);
+                        int stmtCount = 0;
+
+                        String[] nextLine;
+                        int next = 0;
+                        while ((nextLine = reader.readNext()) != null) {
+
+                            stmt.setString(1, nextLine[0]); //Tfn Date
+                            stmt.setString(2, nextLine[1]); //Gene Locus
+                            
+                            stmt.addBatch();
+                            
+
+                            if (++stmtCount % 1000 == 0) {
+                               
+                                stmt.executeBatch();
+                                
+                            }
+                            next++;
+                        }
+                        
+                        stmt.executeBatch();
+                        JOptionPane.showMessageDialog(OrchardMainFrame.this, "Plate Import Sucessful!");
+                    } catch (SQLException | ClassNotFoundException f) {
+                        System.out.println("Unable to connect 3");
+                        System.out.println(f);
+                    } catch (IOException ex) {
+                        Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
+                    } finally {
+                        try {
+                            dbConnector.closeDBConnection(dbConnection);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
                 }
+
             }
 
             if (source == exportButton) {
@@ -408,54 +471,42 @@ public class OrchardMainFrame extends javax.swing.JFrame {
                 PreparedStatement stmt = null;
                 try {
                     dbConnection = dbConnector.connectDB();
-                    
+
                     stmt = dbConnection.prepareStatement("Select * from Gene Where Locus = '" + gene + "'");
 
                     rs = stmt.executeQuery();
-                    while(rs.next()){
+                    while (rs.next()) {
                         geneInfo.setGeneField(rs.getString("Locus"));
-                    geneInfo.setFunctionField(rs.getString("Function"));
+                        geneInfo.setFunctionField(rs.getString("Function"));
 
-                    if(rs.getString("IsKO").equals("Fal")){
-                        geneInfo.setKoStatusField("No");
+                        if (rs.getString("IsKO").equals("Fal")) {
+                            geneInfo.setKoStatusField("No");
+                        } else {
+                            geneInfo.setKoStatusField("Yes");
+                        }
+
+                        geneInfo.setPlateNameField(rs.getString("Plate_idPlate"));
+
+                        geneInfo.setStartLocationField(rs.getString("Start"));
+
+                        geneInfo.setStopLocationField(rs.getString("Stop"));
+
+                        /*search for tfns with selected gene in Tfn_has_Gene
+                         Add date of tfn to model
+                         case for none
+                         set model
+                         */
                     }
-                    else{
-                        geneInfo.setKoStatusField("Yes");
-                    }
-                    
 
-                    geneInfo.setPlateNameField(rs.getString("Plate_idPlate"));
-
-                    geneInfo.setStartLocationField(rs.getString("Start"));
-
-                    geneInfo.setStopLocationField(rs.getString("Stop"));
-                    
-                    
-                    
-                    /*search for tfns with selected gene in Tfn_has_Gene
-                    Add date of tfn to model
-                    case for none
-                    set model
-                    */
-                    
-                    
-                    }
-                    
                     stmt = dbConnection.prepareStatement("Select Transformation_Date from Transformation_has_Gene Where Gene_Locus = '" + gene + "'");
 
                     rs = stmt.executeQuery();
-                    
-                    while(rs.next()){
-                        
+
+                    while (rs.next()) {
+
                         geneInfo.appendTfnElement(rs.getString("Transformation_Date"));
-                        
+
                     }
-                    
-                    
-                    
-                    
-                    
-                    
 
                     /*while (rs.next()) {
                         
