@@ -29,11 +29,11 @@ public class DatabaseConnector {
         
         try{
             dbCon = DriverManager.getConnection(dbURL, username, password);
-            //System.out.println("Success!");
+            System.out.println("Success!");
         }
         catch(SQLException e){
             System.out.println(e);
-            //System.out.println("Unable to connect to the database");
+            System.out.println("Unable to connect to the database");
             
         }
         
@@ -42,7 +42,7 @@ public class DatabaseConnector {
     
     public void closeDBConnection(Connection connection) throws SQLException{
         //connection.close();
-        //System.out.println("Close Successful");
+        System.out.println("Close Successful");
     }
     
     public void deposit(Connection connection,String statement) throws SQLException{

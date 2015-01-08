@@ -4,9 +4,12 @@
  */
 package orchard;
 
+import au.com.bytecode.opencsv.CSVReader;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,6 +18,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.ListModel;
 
@@ -68,9 +72,11 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
         twoFiveWellPlateButton = new javax.swing.JRadioButton();
         newTfnBanner = new javax.swing.JLabel();
         createNewTfnButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tfnGeneList = new javax.swing.JList();
-        showGeneStatsButton = new javax.swing.JButton();
+        timeConstantField = new javax.swing.JTextField();
+        dateField = new javax.swing.JTextField();
+        dateFieldLabel = new javax.swing.JLabel();
+        timeConstantFieldLabel = new javax.swing.JLabel();
+        selectedFileLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -102,7 +108,7 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
         endPageInputField.setText("End Page");
 
-        importTfnButton.setText("Import Gene Data CSV");
+        importTfnButton.setLabel("Import  CSV");
 
         controlPlasmidLabel.setText("Control Plasmid:");
 
@@ -122,143 +128,164 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
         createNewTfnButton.setText("Create New Transformation");
 
-        tfnGeneList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(tfnGeneList);
+        timeConstantField.setText("00.0");
 
-        showGeneStatsButton.setText("Show Gene Stats");
+        dateField.setText("YYYY-MM-DD");
+
+        dateFieldLabel.setText("Tfn Date:");
+
+        timeConstantFieldLabel.setText("Time Constant (ms):");
+        timeConstantFieldLabel.setToolTipText("");
+
+        selectedFileLabel.setText("Select File");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addContainerGap(35, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(batchNameLabel)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(141, 141, 141)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(endPageLabel)
+                                        .addComponent(startPageLabel))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(startPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(endPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(batchInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(54, 54, 54)
+                                    .addComponent(wtButton))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(155, 155, 155)
+                                    .addComponent(pJV53Button)))
+                            .addGap(39, 39, 39))
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(notebookNumLabel)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(notebookInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(95, 95, 95)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(tfnEffLabel)
-                                    .addComponent(controlPlasmidLabel))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(tfnField)
-                                    .addComponent(controlPlasmidField)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(9, 9, 9)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cuvetteButton)
-                                    .addComponent(tfnMethodLabel)
-                                    .addComponent(nineSixPlateButton)
-                                    .addComponent(twoFiveWellPlateButton)))
-                            .addComponent(createNewTfnButton))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addComponent(cellTypeLabel))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(12, 12, 12)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(wtButton)
-                                    .addComponent(pJV53Button)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(batchNameLabel)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(batchInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(notebookLocationLabel)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(startPageLabel)
-                                            .addComponent(notebookNumLabel)
-                                            .addComponent(endPageLabel))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(notebookInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(startPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(endPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(newTfnBanner)
-                        .addGap(12, 12, 12)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                        .addGap(11, 11, 11)
+                        .addComponent(tfnMethodLabel)
+                        .addGap(67, 67, 67)
+                        .addComponent(notebookLocationLabel)
+                        .addGap(129, 129, 129))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(timeConstantFieldLabel)
+                            .addComponent(tfnEffLabel)
+                            .addComponent(controlPlasmidLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                            .addComponent(controlPlasmidField, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tfnField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(timeConstantField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(40, 40, 40))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(twoFiveWellPlateButton)
+                                    .addComponent(cuvetteButton)
+                                    .addComponent(nineSixPlateButton)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
                                 .addComponent(importTfnButton)
-                                .addGap(11, 11, 11)))
-                        .addContainerGap())
+                                .addGap(18, 18, 18)
+                                .addComponent(selectedFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(dateFieldLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(cellTypeLabel))
+                        .addGap(51, 51, 51))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(showGeneStatsButton)
-                        .addGap(45, 45, 45))))
+                        .addComponent(createNewTfnButton)
+                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(newTfnBanner)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(newTfnBanner)
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(importTfnButton)
-                    .addComponent(cellTypeLabel)
-                    .addComponent(createNewTfnButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(createNewTfnButton)
+                    .addComponent(importTfnButton)
+                    .addComponent(selectedFileLabel))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(controlPlasmidField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(controlPlasmidLabel)
+                    .addComponent(dateField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dateFieldLabel))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(pJV53Button)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(6, 6, 6)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfnEffLabel, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tfnField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(8, 8, 8)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(wtButton)
-                            .addComponent(controlPlasmidLabel)
-                            .addComponent(controlPlasmidField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(batchNameLabel)
-                                    .addComponent(batchInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(3, 3, 3)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(tfnEffLabel)
-                                    .addComponent(tfnField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(15, 15, 15)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(notebookLocationLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(notebookNumLabel)
-                                    .addComponent(notebookInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(startPageLabel)
-                                    .addComponent(startPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(endPageLabel)
-                                    .addComponent(endPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(tfnMethodLabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cuvetteButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(twoFiveWellPlateButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nineSixPlateButton)))
-                        .addContainerGap(24, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 210, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(timeConstantFieldLabel)
+                            .addComponent(timeConstantField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(batchNameLabel)
+                            .addComponent(batchInputField, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(31, 31, 31)
+                        .addComponent(tfnMethodLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(showGeneStatsButton)
-                        .addGap(0, 11, Short.MAX_VALUE))))
+                        .addComponent(cuvetteButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(twoFiveWellPlateButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nineSixPlateButton)
+                        .addContainerGap(38, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addComponent(cellTypeLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pJV53Button)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(wtButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(notebookLocationLabel)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(notebookNumLabel)
+                            .addComponent(notebookInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(startPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(startPageLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(endPageLabel)
+                            .addComponent(endPageInputField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20))))
         );
+
+        dateFieldLabel.getAccessibleContext().setAccessibleName("jLable1");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -306,28 +333,30 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
     private javax.swing.JLabel controlPlasmidLabel;
     private javax.swing.JButton createNewTfnButton;
     private javax.swing.JRadioButton cuvetteButton;
+    private javax.swing.JTextField dateField;
+    private javax.swing.JLabel dateFieldLabel;
     private javax.swing.JTextField endPageInputField;
     private javax.swing.JLabel endPageLabel;
     private javax.swing.JButton importTfnButton;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel newTfnBanner;
     private javax.swing.JRadioButton nineSixPlateButton;
     private javax.swing.JTextField notebookInputField;
     private javax.swing.JLabel notebookLocationLabel;
     private javax.swing.JLabel notebookNumLabel;
     private javax.swing.JRadioButton pJV53Button;
-    private javax.swing.JButton showGeneStatsButton;
+    private javax.swing.JLabel selectedFileLabel;
     private javax.swing.JTextField startPageInputField;
     private javax.swing.JLabel startPageLabel;
     private javax.swing.JLabel tfnEffLabel;
     private javax.swing.JTextField tfnField;
-    private javax.swing.JList tfnGeneList;
     private javax.swing.ButtonGroup tfnMethodButtonGroup;
     private javax.swing.JLabel tfnMethodLabel;
+    private javax.swing.JTextField timeConstantField;
+    private javax.swing.JLabel timeConstantFieldLabel;
     private javax.swing.JRadioButton twoFiveWellPlateButton;
     private javax.swing.JRadioButton wtButton;
     // End of variables declaration//GEN-END:variables
-
+    private File csvFile = null;
     /*batchInputField
      cellTypeButtonGroup
      controlPlasmidField
@@ -337,6 +366,15 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
      tfnGeneList
      tfnMethodButtonGroup
      */
+    public String getTimeConstant(){
+        return timeConstantField.getText();
+    }
+    public String getTfnDate(){
+        return dateField.getText();
+    }
+    public String getNotebook(){
+        return notebookInputField.getText();
+    }
     public String getBatchInputField() {
         return batchInputField.getText();
     }
@@ -365,15 +403,9 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
         return tfnMethodButtonGroup.getSelection().getActionCommand();
     }
 
-    public JList getGeneList() {
-        return tfnGeneList;
-    }
+    
 
-    public void setGeneList(JList list) {
-        tfnGeneList = list;
-    }
-
-    public String[] getGeneListGenes() {
+    /*public String[] getGeneListGenes() {
         ListModel model = tfnGeneList.getModel();
         int modelSize = model.getSize();
         String[] genes = new String[modelSize];
@@ -381,13 +413,21 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
             genes[i] = model.getElementAt(i).toString();
         }
         return genes;
+    }*/
+    
+    private void setFile(File file){
+        csvFile = file;
+    }
+    
+    private File getFile(){
+        return csvFile;
     }
 
     private void addActionListeners() {
         NewTransformationActionListener listener = new NewTransformationActionListener();
 
         createNewTfnButton.addActionListener(listener);
-        showGeneStatsButton.addActionListener(listener);
+        //showGeneStatsButton.addActionListener(listener);
         importTfnButton.addActionListener(listener);
     }
 
@@ -406,26 +446,25 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
     class NewTransformationActionListener implements ActionListener {
 
         /*private DatabaseConnector connection = null;
-        private Connection dbConnection = null;
+         private Connection dbConnection = null;
 
-        private void connectToDatabase() {
+         private void connectToDatabase() {
 
-            try {
-                connection = new DatabaseConnector();
-                dbConnection = connection.connectDB();
-            } catch (Exception e) {
-                System.out.println("Unable to connect to database");
-            }
-        }
+         try {
+         connection = new DatabaseConnector();
+         dbConnection = connection.connectDB();
+         } catch (Exception e) {
+         System.out.println("Unable to connect to database");
+         }
+         }
 
-        private void disconnectFromDatabase() {
-            connection.closeDBConnection(dbConnection);
-        }*/
-
+         private void disconnectFromDatabase() {
+         connection.closeDBConnection(dbConnection);
+         }*/
         @Override
         public void actionPerformed(ActionEvent e) {
             Object source = e.getSource();
-            if (source == showGeneStatsButton) {
+            /*if (source == showGeneStatsButton) {
                 OrchardGeneStats geneStats = new OrchardGeneStats();
                 DatabaseConnector dbConnector = new DatabaseConnector();
                 Connection dbConnection = null;
@@ -451,80 +490,116 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
 
                 geneStats.setVisible(true);
 
-            }
+            }*/
 
             if (source == importTfnButton) {
-                try {
-                    OrchardCSVFileOpener fileOpener = new OrchardCSVFileOpener();
-                    fileOpener.setVisible(true);
-
-                } catch (IOException ex) {
-                    Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
+                JFileChooser importCSVBox = new JFileChooser();
+                int result = importCSVBox.showOpenDialog(OrchardNewTransformation.this);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    //new OrchardImportCSV(importCSVBox.getSelectedFile());
+                    System.out.println(importCSVBox.getSelectedFile());
+                    selectedFileLabel.setText(importCSVBox.getSelectedFile().getName());
+                    setFile(importCSVBox.getSelectedFile());
+                    //importCSVBox.
+                    //log.append("Opening");
+                } else if (result == JFileChooser.CANCEL_OPTION) {
+                    System.out.println("Cancel");
                 }
-                DefaultListModel geneListModel = new DefaultListModel();
+                //System.out.println("1");
+                /*DefaultListModel geneListModel = new DefaultListModel();
 
                 //get info from csv
                 //for each gene name
                 geneListModel.addElement("");
 
-                setGeneList(new JList(geneListModel));
-
+                setGeneList(new JList(geneListModel));*/
+                //System.out.println("2");
             }
 
             if (source == createNewTfnButton) {
                 //String gene = selectedGeneList.getSelectedValue().toString();
+                System.out.println(csvFile);
                 DatabaseConnector dbConnector = new DatabaseConnector();
                 ResultSet rs = null;
                 Connection dbConnection = null;
                 PreparedStatement stmt = null;
+                PreparedStatement tfnStmt = null;
+                CSVReader reader = null;
                 try {
+                    reader = new CSVReader(new FileReader(getFile()));
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                try {
+
                     dbConnection = dbConnector.connectDB();
-                    
+
                     //stmt = dbConnection.prepareStatement("Select * from Gene Where Locus = '" + gene + "'");
                     String sql = null;
+
+                    //Need to insert into parent tables first
+                    String sqlTransformation = "Insert into Transformation(Date, Efficiency, Plasmid, TimeConstant,"
+                            + "Notebook, Start_Page, Stop_Page, Method, Comp_Cells_Batch) "
+                            + "values (?,?,?,?,?,?,?,?,?)";
+
+                    tfnStmt = dbConnection.prepareStatement(sqlTransformation);
+                     tfnStmt.setString(1,getTfnDate());
+                     tfnStmt.setString(2, getTfnField());
+                     tfnStmt.setString(3, getControlPlasmid());
+                     tfnStmt.setString(4, getTimeConstant()); //time constant
+                     tfnStmt.setString(5, getNotebook());
+                     tfnStmt.setString(6, getStartPage());
+                     tfnStmt.setString(7, getEndPage());
+                     tfnStmt.setString(8, getTfnMethod());
+                     tfnStmt.setString(9, getBatchInputField());
+                     System.out.println(tfnStmt.toString());
+                     System.out.println("About to execute tfn stmt");
+                     tfnStmt.execute();
+                     System.out.println("Finished execute tfn stmt");
                     //Insert info into Transformation_has_Gene Table
                     String sqlTransformationHasGene = "Insert into Transformation_has_Gene (Transformation_Date, Gene_Locus, Gene_Plate_idPlate,"
                             + "TimeConstant, Colonies, Shared, SharedWith, TfnNumber, KOProduced, Notes, DNA_Amt) "
                             + "values (?,?,?,?,?,?,?,?,?,?,?)";
-                    rs = stmt.executeQuery();
-                    
-                    stmt = dbConnection.prepareStatement(sql);
+
+                    stmt = dbConnection.prepareStatement(sqlTransformationHasGene);
                     int stmtCount = 0;
-                    for(String geneElement : getGeneListGenes())
-                    {
-                        stmt.setString(1, sql); //Tfn Date
-                        stmt.setString(2, sql); //Gene_Locus
-                        stmt.setString(3, sql); //Gene_Plate_idPlate
-                        stmt.setString(4, sql); //TimeConstant
-                        stmt.setString(5, sql); //Colonies
-                        stmt.setString(6, sql); //Shared
-                        stmt.setString(7, sql); //SharedWith
-                        stmt.setString(8, sql); //TfnNumber
-                        stmt.setString(9, sql); //KOProduced
-                        stmt.setString(10, sql); //Notes
-                        stmt.setString(11, sql); //DNA_Amt
+
+                    String[] nextLine;
+                    int next = 0;
+                    while ((nextLine = reader.readNext()) != null) {
+
+                        stmt.setString(1, getTfnDate()); //Tfn Date
+                        stmt.setString(2, nextLine[0]); //Gene Locus
+                        stmt.setString(3, nextLine[1]); //Gene_Plate_idPlate
+                        stmt.setString(4, nextLine[2]); //DNA Amount
+                        stmt.setString(5, nextLine[3]); //Time Constant
+                        stmt.setString(6, nextLine[4]); //Shared
+                        stmt.setString(7, nextLine[5]); //SharedWith
+                        stmt.setString(8, nextLine[6]); //TfnNumber
+                        stmt.setString(9, nextLine[7]); //KOProduced
+                        stmt.setString(10, nextLine[8]); //Notes
+                        stmt.setString(11, nextLine[9]); //colonies
                         stmt.addBatch();
-                        
-                        if(++stmtCount % 1000 == 0){
+                        System.out.println(stmt);
+                        System.out.println("Next: "+next);
+                                
+
+                        if (++stmtCount % 1000 == 0) {
+                            System.out.println("About to execute in 1000 batch");
                             stmt.executeBatch();
+                            System.out.println("About to execute in 1000 batch");
                         }
-                        
+                        next++;
                     }
-                    
+                    System.out.println("About to execute final batch");
                     stmt.executeBatch();
-                    
-                    //Insert data into Transformation Table
-                    String sqlTransformation = "Insert into Transformation (column name) values(?,?,?,?)";
-                    
-                    
-                    
-                    
-                    
+                    System.out.println("About to execute final batch");
                 } catch (SQLException | ClassNotFoundException f) {
                     System.out.println("Unable to connect 3");
-                    //System.out.println(f);
+                    System.out.println(f);
+                } catch (IOException ex) {
+                    Logger.getLogger(OrchardNewTransformation.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
                     try {
                         dbConnector.closeDBConnection(dbConnection);
@@ -534,7 +609,8 @@ public class OrchardNewTransformation extends javax.swing.JFrame {
                 }
 
             } else {
-                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                //System.out.println("Source: " + source);
             }
 
         }

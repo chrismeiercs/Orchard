@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -113,11 +114,17 @@ public class OrchardCSVFileOpener extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void makeFileChooser() throws IOException, FileNotFoundException, SQLException{
-        //importCSVBox = new JFileChooser();
+        importCSVBox = new JFileChooser();
         int result = importCSVBox.showOpenDialog(this);
         
         if(result == JFileChooser.APPROVE_OPTION){
-            new OrchardImportCSV(importCSVBox.getSelectedFile());
+            //new OrchardImportCSV(importCSVBox.getSelectedFile());
+            System.out.println(importCSVBox.getSelectedFile());
+            //importCSVBox.
+            //log.append("Opening");
+        }
+        else if(result == JFileChooser.CANCEL_OPTION){
+            System.out.println("Cancel");
         }
     }
     private class CSVFileFilter extends FileFilter{
@@ -128,9 +135,11 @@ public class OrchardCSVFileOpener extends javax.swing.JFrame {
             }
             
             String name = f.getName();
-            String [] parts = name.split(".");
-            String ext = parts[1];
-            return ext.equalsIgnoreCase("csv");
+            //String name = "examples.desktop";
+            System.out.println("Name: " + name);
+            
+            return name.contains(".csv");
+            
         }
 
         @Override
