@@ -368,7 +368,7 @@ public class OrchardMainFrame extends javax.swing.JFrame {
             }
 
             Arrays.sort(elements);
-            //return elements;
+            
             model.removeAllElements();
 
             for (String element : elements) {
@@ -458,7 +458,14 @@ public class OrchardMainFrame extends javax.swing.JFrame {
             }
 
             if (source == exportButton) {
-                new OrchardCSVFileSaver(selectedGeneList).setVisible(true);
+                try {
+                    //new OrchardCSVFileSaver(selectedGeneList).setVisible(true);
+                    new OrchardExportCSV("p.csv", selectedGeneList);
+                } catch (IOException ex) {
+                    Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(OrchardMainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
 
             if (source == viewGeneInfoButton) {
