@@ -20,9 +20,9 @@ public class DatabaseConnector {
     
     public Connection connectDB() throws SQLException, ClassNotFoundException {
         Class.forName("com.mysql.jdbc.Driver");
-        String dbURL = "jdbc:mysql://127.0.0.1:3306/OrchardDB";
-        String username = "root";
-        String password = "phage";
+        String dbURL = "*************";
+        String username = "************";
+        String password = "************";
         
         Connection dbCon = null;
         
